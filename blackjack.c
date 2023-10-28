@@ -147,6 +147,9 @@ void card(double x, double y, double z, double th, double ph, int number, int su
     // suit is the suit of the card Spades, Hearts, Diamonds, Clubs -> (0,1,2,3)
 
 
+    // mjc TODO: the thickness is supposed to be only 0.17mm for area 3.5” x 2.25” (convert units )
+
+
     glPushMatrix();
     glTranslated(x, y, z);
     glRotated(th,0,1,0);
