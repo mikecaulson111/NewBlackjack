@@ -200,6 +200,7 @@ void HalfCircle(double x, double y, double z, double r, double h, double th)
 
     glNormal3f(0, 1, 0);
     glVertex3f(0,0,0);
+    // adding a comment here for fun
     for(int i = 0; i < 180; i += 10)
     {
         double tx = Cos(i);
