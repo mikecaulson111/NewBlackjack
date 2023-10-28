@@ -38,7 +38,7 @@ bool walk_right = false;
 bool walk_back = false;
 bool walk_left = false;
 
-unsigned int textures[5];
+unsigned int textures[6];
 int numTextures = 1;
 
 int shader[3] = {0,0,0};
@@ -135,6 +135,83 @@ void Rectang(double xlow, double ylow, double zlow, double xhigh, double yhigh, 
     glTexCoord2f(0,0); glVertex3d(1, 0, 0);
     glTexCoord2f(s,0); glVertex3d(0,   0, 0);
     glTexCoord2f(s,t); glVertex3d(0,   1,  0);
+
+    glEnd();
+
+    glPopMatrix();
+}
+
+void card(double x, double y, double z, double th, double ph, int number, int suit) // th is rotated in y, ph is rotated about x (flipping card over)
+{
+    // number is the card number value A...King -> (0...12)
+    // suit is the suit of the card Spades, Hearts, Diamonds, Clubs -> (0,1,2,3)
+
+
+    glPushMatrix();
+    glTranslated(x, y, z);
+    glRotated(th,0,1,0);
+    glRotated(ph,1,0,0);
+
+    SetColor(1,1,1);
+
+    glBindTexture(GL_TEXTURE_2D, textures[0]);
+
+    glBegin(GL_QUADS);
+
+    // glTexCoord2d(0.01+0.0025,0+0.005); glVertex2d(-0.5,1.5);
+    // glTexCoord2d(0.0769+0.0075,0+0.005); glVertex2d(.5,1.5);
+    // glTexCoord2d(0.0769+0.0075,0.25 - 0.005); glVertex2d(0.5,2.5);
+    // glTexCoord2d(0.01+0.0025,0.25 - 0.005); glVertex2d(-0.5,2.5);
+
+    // front side
+    glNormal3f(0,0,1);
+    glTexCoord2f((number*0.0769)+(0.01+0.0025),(suit*0.25)+(0.25-0.005)); glVertex3d(0, 1,  1);
+    glTexCoord2f((number*0.0769)+(0.01+0.0025),(suit*0.25)+(0.005)); glVertex3d(0, 0, 1);
+    glTexCoord2f((number*0.0769)+(0.0769+0.0075),(suit*0.25)+(0.005)); glVertex3d(1, 0, 1);
+    glTexCoord2f((number*0.0769)+(0.0769+0.0075),(suit*0.25)+(0.25-0.005)); glVertex3d(1, 1,  1);
+
+    glEnd();
+    glBegin(GL_QUADS);
+
+    // bottom
+    glNormal3f(0,-1,0);
+    glVertex3d(0,  0, 1);
+    glVertex3d(0,  0, 0);
+    glVertex3d(1, 0, 0);
+    glVertex3d(1, 0, 1);
+
+    // top
+    glNormal3f(0,1,0);
+    glVertex3d(0,  1, 1);
+    glVertex3d(0,  1, 0);
+    glVertex3d(1, 1, 0);
+    glVertex3d(1, 1, 1);
+
+    // left side:
+    glNormal3f(-1,0,0);
+    glVertex3d(0, 1,  0);
+    glVertex3d(0, 0, 0);
+    glVertex3d(0, 0, 1);
+    glVertex3d(0, 1,  1);
+
+    // right side:
+    glNormal3f(1,0,0);
+    glVertex3d(1, 1,  1);
+    glVertex3d(1, 0, 1);
+    glVertex3d(1, 0, 0);
+    glVertex3d(1, 1,  0);
+
+    glEnd();
+
+    // back side:
+    glBindTexture(GL_TEXTURE_2D, textures[5]);
+
+    glBegin(GL_QUADS);
+    glNormal3f(0,0,-1);
+    glTexCoord2f(0,1); glVertex3d(1, 1,  0);
+    glTexCoord2f(0,0); glVertex3d(1, 0, 0);
+    glTexCoord2f(1,0); glVertex3d(0,   0, 0);
+    glTexCoord2f(1,1); glVertex3d(0,   1,  0);
 
     glEnd();
 
@@ -365,14 +442,16 @@ void display()
     // for the y it is the suit!!
 
 
-    SetColor(1,1,1);
-    glBindTexture(GL_TEXTURE_2D, textures[0]);
-    glBegin(GL_QUADS);
-    glTexCoord2d(0.01+0.0025,0+0.005); glVertex2d(-0.5,1.5);
-    glTexCoord2d(0.0769+0.0075,0+0.005); glVertex2d(.5,1.5);
-    glTexCoord2d(0.0769+0.0075,0.25 - 0.005); glVertex2d(0.5,2.5);
-    glTexCoord2d(0.01+0.0025,0.25 - 0.005); glVertex2d(-0.5,2.5);
-    glEnd();
+    // SetColor(1,1,1);
+    // glBindTexture(GL_TEXTURE_2D, textures[0]);
+    // glBegin(GL_QUADS);
+    // glTexCoord2d(0.01+0.0025,0+0.005); glVertex2d(-0.5,1.5);
+    // glTexCoord2d(0.0769+0.0075,0+0.005); glVertex2d(.5,1.5);
+    // glTexCoord2d(0.0769+0.0075,0.25 - 0.005); glVertex2d(0.5,2.5);
+    // glTexCoord2d(0.01+0.0025,0.25 - 0.005); glVertex2d(-0.5,2.5);
+    // glEnd();
+
+    card(0,1,1,0, 0, 0,0);
 
     glFlush();
     glutSwapBuffers();
@@ -610,6 +689,7 @@ int main(int argc, char* argv[])
     textures[2] = loadBMP("greenfelt2.bmp");
     textures[3] = loadBMP("newcobble.bmp");
     textures[4] = loadBMP("btable.bmp");
+    textures[5] = loadBMP("tred.bmp"); // back of red card
 
     printf("HELLO AGAIN\n");
 
