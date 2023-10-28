@@ -352,7 +352,7 @@ void display()
     SetColor(1,1,1);
     // glBindTexture(GL_TEXTURE_2D, textures[2]);
     glBindTexture(GL_TEXTURE_2D, textures[4]);
-    Table(0,0,0,1,0.65,1,0);
+    Table(0,0,0,1,0.60,1,0);
     // glBindTexture(GL_TEXTURE_2D, 0);
 
     // red plane in middle
