@@ -11,6 +11,9 @@
 #define Cos(th) cos(3.14159265/180*(th))
 #define Sin(th) sin(3.14159265/180*(th))
 
+// mjc temp
+int t = 0;
+
 int fov=53;       //  Field of view (for perspective)
 int light=1;      //  Lighting
 double asp=1;     //  Aspect ratio
@@ -154,6 +157,7 @@ void card(double x, double y, double z, double th, double ph, int number, int su
     glTranslated(x, y, z);
     glRotated(th,0,1,0);
     glRotated(ph,1,0,0);
+    glScaled(0.05626,0.0875,0.001);
 
     SetColor(1,1,1);
 
@@ -211,10 +215,10 @@ void card(double x, double y, double z, double th, double ph, int number, int su
 
     glBegin(GL_QUADS);
     glNormal3f(0,0,-1);
-    glTexCoord2f(0,1); glVertex3d(1, 1,  0);
-    glTexCoord2f(0,0); glVertex3d(1, 0, 0);
-    glTexCoord2f(1,0); glVertex3d(0,   0, 0);
-    glTexCoord2f(1,1); glVertex3d(0,   1,  0);
+    glTexCoord2f(0.12,0.9); glVertex3d(1, 1,  0);
+    glTexCoord2f(0.12,0.1); glVertex3d(1, 0, 0);
+    glTexCoord2f(0.95,0.1); glVertex3d(0,   0, 0);
+    glTexCoord2f(0.95,0.9); glVertex3d(0,   1,  0);
 
     glEnd();
 
@@ -454,7 +458,7 @@ void display()
     // glTexCoord2d(0.01+0.0025,0.25 - 0.005); glVertex2d(-0.5,2.5);
     // glEnd();
 
-    card(0,1,1,0, 0, 0,0);
+    card(0,1,1,t, t, 0,0);
 
     glFlush();
     glutSwapBuffers();
@@ -543,6 +547,9 @@ void idle()
         Ex = Ex + (dt * dx);
         Ez = Ez + (dt * dz);
     }
+
+    t++;
+    t %= 360;
 
     glutPostRedisplay();
 }
@@ -692,7 +699,7 @@ int main(int argc, char* argv[])
     textures[2] = loadBMP("greenfelt2.bmp");
     textures[3] = loadBMP("newcobble.bmp");
     textures[4] = loadBMP("btable.bmp");
-    textures[5] = loadBMP("tred.bmp"); // back of red card
+    textures[5] = loadBMP("backcardcloseup.bmp"); // back of red card
 
     printf("HELLO AGAIN\n");
 
