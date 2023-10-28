@@ -350,19 +350,26 @@ void display()
 
     // glColor3f(1,1,1);
     SetColor(1,1,1);
-    // glBindTexture(GL_TEXTURE_2D, textures[2]);
     glBindTexture(GL_TEXTURE_2D, textures[4]);
     Table(0,0,0,1,0.60,1,0);
-    // glBindTexture(GL_TEXTURE_2D, 0);
 
-    // red plane in middle
-    // glColor3f(1.0, 0.0, 0.0);
-    SetColor(1,0,0);
+    // mjc for the card below, the number being added are so that we can remove the pink spaces
+    // in the x-direction it is either adding/subtracting 0.0025, in the y it is adding/subtracting
+    // 0.005
+    // by doing this we can see only the card
+
+    //TODO: add a multiplier for x and for the y,
+    // for the x it is the card number, so a "jack" would be *10, a "3" would be *2 I think, need to test
+    // for the y it is the suit!!
+
+
+    SetColor(1,1,1);
+    glBindTexture(GL_TEXTURE_2D, textures[0]);
     glBegin(GL_QUADS);
-    glVertex2d(-0.5, 0.5);
-    glVertex2d(0.5, 0.5);
-    glVertex2d(0.5, 1.5);
-    glVertex2d(-0.5, 1.5);
+    glTexCoord2d(0.01+0.0025,0+0.005); glVertex2d(-0.5,1.5);
+    glTexCoord2d(0.0769+0.0075,0+0.005); glVertex2d(.5,1.5);
+    glTexCoord2d(0.0769+0.0075,0.25 - 0.005); glVertex2d(0.5,2.5);
+    glTexCoord2d(0.01+0.0025,0.25 - 0.005); glVertex2d(-0.5,2.5);
     glEnd();
 
     glFlush();
