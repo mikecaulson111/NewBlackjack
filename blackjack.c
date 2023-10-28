@@ -356,6 +356,8 @@ void display()
     // mjc for the card below, the number being added are so that we can remove the pink spaces
     // in the x-direction it is either adding/subtracting 0.0025, in the y it is adding/subtracting
     // 0.005
+    // NOTE: for the middle two, the x is + 0.0075, this is because it is actually +0.01-0.0025,
+    // where the +0.01 comes from the size of the card, it all works out... maybe
     // by doing this we can see only the card
 
     //TODO: add a multiplier for x and for the y,
