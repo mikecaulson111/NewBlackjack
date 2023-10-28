@@ -195,17 +195,23 @@ void Cylinder(double x, double y, double z, double r, double h,double th, double
 void HalfCircle(double x, double y, double z, double r, double h, double th)
 {
     glPushMatrix();
+    glTranslated(x, y, z);
+    glRotated(th,0,1,0);
+    glScaled(r,h,r);
 
     glBegin(GL_TRIANGLE_FAN);
 
+    // TODO: remove the +0.025 when haveing a better texture
+    // mjc adding +0.025 for each of the textures is to make it look more correct for now, remove later
+
     glNormal3f(0, 1, 0);
-    glVertex3f(0,0,0);
+    glTexCoord2d(0.5+0.025,0); glVertex3f(0,0,0);
     // adding a comment here for fun
-    for(int i = 0; i < 180; i += 10)
+    for(int i = 0; i <= 180; i += 10)
     {
         double tx = Cos(i);
         double tz = Sin(i);
-        glTexCoord2d(tx/2 + 0.5, tz/2 + 0.5);
+        glTexCoord2d(((tx + 1) / 2)+0.025, -tz);
         glVertex3f(tx,0,tz);
     }
 
@@ -222,6 +228,8 @@ void Table(double x, double y, double z, double dx, double dy, double dz, double
     glScaled(dx,dy,dz);
 
     HalfCircle(0, 1, 0, 1, 1, 0);
+    glBindTexture(GL_TEXTURE_2D, textures[1]);
+    Rectang(-0.25,0,0,0.25,0.98,0.25,1,1);
 
     glPopMatrix();
 }
@@ -342,8 +350,9 @@ void display()
 
     // glColor3f(1,1,1);
     SetColor(1,1,1);
-    glBindTexture(GL_TEXTURE_2D, textures[2]);
-    Table(0,0,0,1,0.5,1,0);
+    // glBindTexture(GL_TEXTURE_2D, textures[2]);
+    glBindTexture(GL_TEXTURE_2D, textures[4]);
+    Table(0,0,0,1,0.65,1,0);
     // glBindTexture(GL_TEXTURE_2D, 0);
 
     // red plane in middle
