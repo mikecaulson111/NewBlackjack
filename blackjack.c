@@ -4,12 +4,15 @@
 #include <string.h>
 #include <math.h>
 #include <stdbool.h>
+#include <time.h>
 #include "opengl.h"
 #include "customBMP.h"
 
 // in degrees
 #define Cos(th) cos(3.14159265/180*(th))
 #define Sin(th) sin(3.14159265/180*(th))
+
+#define FLIPPED_OVER 180 // this is the card flipped on its back
 
 // mjc temp
 int t = 0;
@@ -53,6 +56,32 @@ const float Diffuse[]   = {1.0,1.0,1.0,1.0};
 const float Specular[]  = {1.0,1.0,1.0,1.0};
 const float Direction[] = {0.0,-1.0,0.0,1.0};
 const float Shinyness[] = {64}; // was 16
+
+typedef struct t_playing_card {
+    int suit;
+    int number;
+} playing_card;
+
+
+playing_card cards[52];
+
+void shuffle_cards(size_t n)
+{
+    if ( n > 1 )
+    {
+        srand(time(NULL)); // Seed the random number generator with the current time
+
+        for (int i = n - 1; i > 0; i--) {
+            // Generate a random index between 0 and i (inclusive)
+            int j = rand() % (i + 1);
+
+            // Swap cards[i] and cards[j]
+            playing_card temp = cards[i];
+            cards[i] = cards[j];
+            cards[j] = temp;
+        }
+    }
+}
 
 /*
  * Set color
@@ -144,7 +173,8 @@ void Rectang(double xlow, double ylow, double zlow, double xhigh, double yhigh, 
     glPopMatrix();
 }
 
-void card(double x, double y, double z, double th, double ph, int number, int suit) // th is rotated in y, ph is rotated about x (flipping card over)
+void card(double x, double y, double z, double th, double ph, double zh, int number, int suit) // th is rotated in y, ph is rotated about x (flipping card over)
+// zh is about the z axis
 {
     // number is the card number value A...King -> (0...12)
     // suit is the suit of the card Spades, Hearts, Diamonds, Clubs -> (0,1,2,3)
@@ -157,6 +187,7 @@ void card(double x, double y, double z, double th, double ph, int number, int su
     glTranslated(x, y, z);
     glRotated(th,0,1,0);
     glRotated(ph,1,0,0);
+    glRotated(zh,0,0,1);
     glScaled(0.05626,0.0875,0.001);
 
     SetColor(1,1,1);
@@ -458,7 +489,21 @@ void display()
     // glTexCoord2d(0.01+0.0025,0.25 - 0.005); glVertex2d(-0.5,2.5);
     // glEnd();
 
-    card(0,1,1,t, t, 0,0);
+    // card(0,1,1,t, t, t, cards[0].number, cards[0].suit);
+
+// mjc temp to show the cards
+    // int counter = 0;
+
+    // for(int i = 0; i < 4; i++)
+    // {
+    //     for(int j = 0; j < 13; j++)
+    //     {
+    //         card(j*0.1,(i*0.1)+1,0,0,0,0,cards[counter].number,cards[counter].suit);
+    //         counter++;
+    //     }
+    // }
+
+    
 
     glFlush();
     glutSwapBuffers();
@@ -702,6 +747,32 @@ int main(int argc, char* argv[])
     textures[5] = loadBMP("backcardcloseup.bmp"); // back of red card
 
     printf("HELLO AGAIN\n");
+
+    // srand(time(NULL));
+    // printf("%lu", time(NULL));
+
+    // initialize cards:
+    int counter = 0;
+    // p_cards = malloc(52 * sizeof(playing_card));
+    // if ( p_cards != NULL )
+    // {
+        for(int i = 0; i < 4; i++)
+        {
+            for ( int j = 0; j < 13; j++ )
+            {
+                cards[counter].suit = i;
+                cards[counter].number = j;
+                counter++;
+            }
+        }
+    // }
+
+    shuffle_cards(52);
+
+    // for(int i = 0; i < 52; i++)
+    // {
+    //     printf("#%i, suit: %i, number %i\n", i, cards[i].suit, cards[i].number);
+    // }
 
     glutMainLoop();
 }
