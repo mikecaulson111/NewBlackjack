@@ -7,6 +7,8 @@
 #include <time.h>
 #include "opengl.h"
 #include "customBMP.h"
+#include "cards.h"
+#include "dealCards.h"
 
 // in degrees
 #define Cos(th) cos(3.14159265/180*(th))
@@ -57,13 +59,12 @@ const float Specular[]  = {1.0,1.0,1.0,1.0};
 const float Direction[] = {0.0,-1.0,0.0,1.0};
 const float Shinyness[] = {64}; // was 16
 
-typedef struct t_playing_card {
-    int suit;
-    int number;
-} playing_card;
+int cards_at_player = 0; // this is the number of cards the player has in front of them (for spacing)
+int cards_at_dealer = 0; // this is the number of cards the dealer has in front of them (for spacing)
 
 
 playing_card cards[52];
+int num_cards = 52; // this is the number of cards in play
 
 void shuffle_cards(size_t n)
 {
@@ -188,7 +189,7 @@ void card(double x, double y, double z, double th, double ph, double zh, int num
     glRotated(th,0,1,0);
     glRotated(ph,1,0,0);
     glRotated(zh,0,0,1);
-    glScaled(0.05626,0.0875,0.001);
+    glScaled(0.05626,0.0875,0.00025);
 
     SetColor(1,1,1);
 
@@ -479,31 +480,11 @@ void display()
     // for the x it is the card number, so a "jack" would be *10, a "3" would be *2 I think, need to test
     // for the y it is the suit!!
 
+    // go to something like 52 or 3*52, but if so we need to add more cards to cards object
 
-    // SetColor(1,1,1);
-    // glBindTexture(GL_TEXTURE_2D, textures[0]);
-    // glBegin(GL_QUADS);
-    // glTexCoord2d(0.01+0.0025,0+0.005); glVertex2d(-0.5,1.5);
-    // glTexCoord2d(0.0769+0.0075,0+0.005); glVertex2d(.5,1.5);
-    // glTexCoord2d(0.0769+0.0075,0.25 - 0.005); glVertex2d(0.5,2.5);
-    // glTexCoord2d(0.01+0.0025,0.25 - 0.005); glVertex2d(-0.5,2.5);
-    // glEnd();
-
-    // card(0,1,1,t, t, t, cards[0].number, cards[0].suit);
-
-// mjc temp to show the cards
-    // int counter = 0;
-
-    // for(int i = 0; i < 4; i++)
-    // {
-    //     for(int j = 0; j < 13; j++)
-    //     {
-    //         card(j*0.1,(i*0.1)+1,0,0,0,0,cards[counter].number,cards[counter].suit);
-    //         counter++;
-    //     }
-    // }
-
-    
+    for (int i = 0; i < 52; i++) {
+        card(0, 0.60025+i*0.00025, 0, 0, 90, 0, cards[i % 52].number, cards[i % 52].suit);
+    }
 
     glFlush();
     glutSwapBuffers();
@@ -538,6 +519,12 @@ void keys(unsigned char ch, int x, int y)
             break;
         case '+':
             ylight += 0.5;
+            break;
+        case 'g':
+            deal_cards_init(cards, num_cards);
+            cards_at_player = 2;
+            cards_at_player = 2;
+            // checkWin();
     }
 
     project(fov, asp, dim);

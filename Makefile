@@ -9,7 +9,7 @@ CFLAGS = -Wall -g
 
 # Source files
 # SRCS = main.c functions.c // mjc follow this template for adding files
-SRCS = blackjack.c customBMP.c
+SRCS = blackjack.c customBMP.c dealCards.c
 
 # Object files
 OBJS = $(SRCS:.c=.o)
