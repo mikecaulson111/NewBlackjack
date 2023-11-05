@@ -28,6 +28,11 @@ void give_card(playing_card *p_playing_cards, playing_card *p_persons_cards, int
 }
 
 
+void hit_card(playing_card *p_cards, int *p_total, playing_card *p_playing_cards) {
+   // something here for hitting card similar to above , actually probably call the above function 
+}
+
+
 int check_win(playing_card *p_players_cards, playing_card *p_dealers_cards, bool final) {
     // final is to check at the end of the game, otherwise just check if player has 21 or dealer has 21
 
@@ -98,19 +103,21 @@ int check_win(playing_card *p_players_cards, playing_card *p_dealers_cards, bool
    }
    else
    {
-        if ( dealer_total < 17 )
-        {
-            if ( player_total > dealer_total ) // player wins
+        if ( final ) {
+            if ( dealer_total < 17 )
             {
-                winner = 1;
-            }
-            else if ( player_total < dealer_total ) // dealer wins
-            {
-                winner = 2;
-            }
-            else // push
-            {
-                winner = 3;
+                if ( player_total > dealer_total ) // player wins
+                {
+                    winner = 1;
+                }
+                else if ( player_total < dealer_total ) // dealer wins
+                {
+                    winner = 2;
+                }
+                else // push
+                {
+                    winner = 3;
+                }
             }
         }
    }
@@ -125,10 +132,10 @@ void deal_cards_init(playing_card *p_cards, int *p_total, playing_card *p_player
     // to account for if they get all aces, and it will hold the cards in front of them
 
     // check if total > 15 or 15% and then deal top card and decrease total by 1
-    for( int i = 0; i < *p_total + 1; i++ )
-    {
-        printf("[%i], %i, %i\n",i, p_cards[i].suit, p_cards[i].number);
-    }
+    // for( int i = 0; i < *p_total + 1; i++ )
+    // {
+    //     printf("[%i], %i, %i\n",i, p_cards[i].suit, p_cards[i].number);
+    // }
 
     give_card(p_cards, p_players_cards, p_total, true);
     give_card(p_cards, p_dealers_cards, p_total, false);

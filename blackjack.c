@@ -552,6 +552,11 @@ void keys(unsigned char ch, int x, int y)
             break;
         case 'b':
             clear_cards(players_cards, dealers_cards);
+            break;
+        case 'h':
+            hit_card(cards, &num_cards, players_cards);
+            check_win(players_cards, dealers_cards, false);
+            break;
     }
 
     project(fov, asp, dim);
