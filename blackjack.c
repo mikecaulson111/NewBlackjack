@@ -547,7 +547,7 @@ void keys(unsigned char ch, int x, int y)
             cards_at_player = 2;
             cards_at_player = 2;
             game_playing = true;
-            winner = check_win(players_cards, dealers_cards, false);
+            winner = check_initial_win(players_cards, dealers_cards);
             // checkWin();
             break;
         case 'b':
@@ -613,7 +613,18 @@ void idle()
     }
 
     t++;
-    t %= 360;
+    // t %= 360;
+    t %= 50;
+
+    // if ( t == 0 )
+    // {
+    //     winner = check_win(players_cards, dealers_cards, true);
+
+    //     if ( winner == -1 && player_playing == false )
+    //     {
+
+    //     }
+    // }
 
 // mjc I think this is where the end game should be show??
     // if ( game_playing && winner != -1 )

@@ -16,4 +16,6 @@ int check_win(playing_card *p_players_cards, playing_card *p_dealers_cards, bool
 
 void hit_card(playing_card *p_cards, int *p_total, playing_card *p_playing_cards);
 
+int check_initial_win(playing_card *p_players_cards, playing_card *p_dealers_cards);
+
 #endif

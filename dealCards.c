@@ -30,8 +30,49 @@ void give_card(playing_card *p_playing_cards, playing_card *p_persons_cards, int
 
 void hit_card(playing_card *p_cards, int *p_total, playing_card *p_playing_cards) {
    // something here for hitting card similar to above , actually probably call the above function 
+
+   give_card(p_cards, p_playing_cards, p_total, true);
 }
 
+int check_initial_win(playing_card *p_players_cards, playing_card *p_dealers_cards) {
+    // this is only if both players have 2 cards:
+    int player_total = 0;
+    int dealer_total = 0;
+
+    for (int i = 0; i < 17; i++)
+    {
+        if ( p_players_cards[i].suit != -1 )
+        {
+            if ( p_players_cards[i].number >= 9 )
+            {
+                player_total += 10;
+            }
+            else if ( p_players_cards[i].number == 0 )
+            {
+                player_total += 11;
+            }
+            else
+            {
+                player_total += p_players_cards[i].number + 1;
+            }
+        }
+        if ( p_dealers_cards[i].suit != -1 )
+        {
+            if ( p_dealers_cards[i].number >= 9 )
+            {
+                dealer_total += 10;
+            }
+            else if ( p_dealers_cards[i].number == 0 )
+            {
+                dealer_total += 11;
+            }
+            else
+            {
+                dealer_total += p_dealers_cards[i].number + 1;
+            }
+        }
+    }
+}
 
 int check_win(playing_card *p_players_cards, playing_card *p_dealers_cards, bool final) {
     // final is to check at the end of the game, otherwise just check if player has 21 or dealer has 21
