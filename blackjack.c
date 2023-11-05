@@ -63,8 +63,17 @@ int cards_at_player = 0; // this is the number of cards the player has in front 
 int cards_at_dealer = 0; // this is the number of cards the dealer has in front of them (for spacing)
 
 
-playing_card cards[52];
-int num_cards = 52; // this is the number of cards in play
+playing_card cards[TOTAL_NUM_CARDS+1];
+int num_cards = TOTAL_NUM_CARDS; // this is the number of cards in play minus 1 to make things work better
+
+bool game_playing = false;
+bool player_playing = false; // This will be if the player chooses to stand it will be false if game_playing is true
+
+int winner = -1;
+
+
+playing_card players_cards[17];
+playing_card dealers_cards[17];
 
 void shuffle_cards(size_t n)
 {
@@ -102,7 +111,7 @@ void project(double fov, double asp, double dim)
 
     if ( fov )
     {
-        gluPerspective(fov, asp, dim/16, dim * 16);
+        gluPerspective(fov, asp, dim/64, dim * 16);
     }
     else
     {
@@ -482,8 +491,21 @@ void display()
 
     // go to something like 52 or 3*52, but if so we need to add more cards to cards object
 
-    for (int i = 0; i < 52; i++) {
-        card(0, 0.60025+i*0.00025, 0, 0, 90, 0, cards[i % 52].number, cards[i % 52].suit);
+    for (int i = 0; i < num_cards+1; i++) {
+        card(0.25, 0.60025+i*0.00025, 0.125, 45, 90, 0, cards[i % 52].number, cards[i % 52].suit); // none should be showing
+    }
+
+    for (int i = 0; i < 17; i++) {
+        if ( players_cards[i].suit != -1 )
+        {
+            card(0 + i*0.057, 0.60025+ i*0.00025, 0.75, 0, (players_cards[i].showing) ? 270 : 90, 0, cards[players_cards[i].place].number, cards[players_cards[i].place].suit);
+        }
+    }
+
+    for (int i = 0; i < 17; i++) {
+        if ( dealers_cards[i].suit != -1) {
+            card(0 + i*0.057, 0.60025 + i*0.00025, 0.25, 0, (dealers_cards[i].showing) ? 270 : 90, 0, cards[dealers_cards[i].place].number, cards[dealers_cards[i].place].suit);
+        }
     }
 
     glFlush();
@@ -521,10 +543,15 @@ void keys(unsigned char ch, int x, int y)
             ylight += 0.5;
             break;
         case 'g':
-            deal_cards_init(cards, num_cards);
+            deal_cards_init(cards, &num_cards, players_cards, dealers_cards);
             cards_at_player = 2;
             cards_at_player = 2;
+            game_playing = true;
+            winner = check_win(players_cards, dealers_cards, false);
             // checkWin();
+            break;
+        case 'b':
+            clear_cards(players_cards, dealers_cards);
     }
 
     project(fov, asp, dim);
@@ -582,6 +609,14 @@ void idle()
 
     t++;
     t %= 360;
+
+// mjc I think this is where the end game should be show??
+    // if ( game_playing && winner != -1 )
+    // {
+    //     for(int i = 0; i < 17; i++) {
+    //         dealers_cards[i].showing = true;
+    //     }
+    // }
 
     glutPostRedisplay();
 }
@@ -740,26 +775,20 @@ int main(int argc, char* argv[])
 
     // initialize cards:
     int counter = 0;
-    // p_cards = malloc(52 * sizeof(playing_card));
-    // if ( p_cards != NULL )
-    // {
-        for(int i = 0; i < 4; i++)
+    for(int i = 0; i < 4; i++)
+    {
+        for ( int j = 0; j < 13; j++ )
         {
-            for ( int j = 0; j < 13; j++ )
-            {
-                cards[counter].suit = i;
-                cards[counter].number = j;
-                counter++;
-            }
+            cards[counter].suit = i;
+            cards[counter].number = j;
+            cards[counter].showing = false;
+            counter++;
         }
-    // }
+    }
 
     shuffle_cards(52);
 
-    // for(int i = 0; i < 52; i++)
-    // {
-    //     printf("#%i, suit: %i, number %i\n", i, cards[i].suit, cards[i].number);
-    // }
+    clear_cards(players_cards, dealers_cards);
 
     glutMainLoop();
 }
