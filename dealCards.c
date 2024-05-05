@@ -72,6 +72,10 @@ int check_initial_win(playing_card *p_players_cards, playing_card *p_dealers_car
             }
         }
     }
+    if (dealer_total > player_total) {
+        return 1; // MJC TODO same as the comment directly below
+    }
+    return 0; // MJC TODO I NEed to figure out what I actually need to return here lol
 }
 
 int check_win(playing_card *p_players_cards, playing_card *p_dealers_cards, bool final) {
